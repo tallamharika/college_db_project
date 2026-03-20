@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Student</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 p-10">
+
+<h1 class="text-3xl font-bold text-center mb-8">
+Edit Student
+</h1>
+
+<div class="max-w-md mx-auto bg-white p-6 shadow rounded">
+
+<form action="/update/<%= student.id %>" 
+method="POST" 
+enctype="multipart/form-data" 
+class="space-y-4">
+
+<input name="name" value="<%= student.name %>" class="border p-2 w-full">
+
+<input name="age" value="<%= student.age %>" class="border p-2 w-full">
+
+<select name="branch" class="border p-2 w-full">
+
+<option value="CSE" <%= student.branch === 'CSE' ? 'selected' : '' %>>CSE</option>
+
+<option value="ECE" <%= student.branch === 'ECE' ? 'selected' : '' %>>ECE</option>
+
+<option value="MECH" <%= student.branch === 'MECH' ? 'selected' : '' %>>MECH</option>
+
+</select>
+
+
+<input name="cgpa" value="<%= student.cgpa %>" class="border p-2 w-full">
+
+<label class="block font-semibold">Change Photo</label>
+
+<input type="file" name="photo" class="border p-2 w-full">
+
+<button class="bg-blue-500 text-white px-4 py-2 w-full">
+Update Student
+</button>
+
+</form>
+
+
+</div>
+
+</body>
+</html>

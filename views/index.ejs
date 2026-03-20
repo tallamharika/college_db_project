@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Smart College Portal</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body class="bg-gray-100 p-10">
+
+<h1 class="text-3xl font-bold text-center mb-8">
+Smart College Portal
+</h1>
+<div class="text-right mb-4">
+  <a href="/logout" class="bg-red-500 text-white px-4 py-2 rounded">
+    Logout
+  </a>
+</div>
+
+<!-- Dashboard Cards -->
+
+<div class="grid grid-cols-4 gap-4 mb-8">
+
+<div class="bg-blue-500 text-white p-4 rounded shadow text-center">
+<h2 class="text-xl font-bold">Total Students</h2>
+<p class="text-2xl"><%= total %></p>
+</div>
+
+<div class="bg-green-500 text-white p-4 rounded shadow text-center">
+<h2 class="text-xl font-bold">CSE</h2>
+<p class="text-2xl"><%= cse %></p>
+</div>
+
+<div class="bg-yellow-500 text-white p-4 rounded shadow text-center">
+<h2 class="text-xl font-bold">ECE</h2>
+<p class="text-2xl"><%= ece %></p>
+</div>
+
+<div class="bg-purple-500 text-white p-4 rounded shadow text-center">
+<h2 class="text-xl font-bold">MECH</h2>
+<p class="text-2xl"><%= mech %></p>
+</div>
+
+</div>
+
+
+<!-- Chart -->
+
+<div class="max-w-4xl mx-auto bg-white shadow rounded p-6 mb-8">
+
+<h2 class="text-xl font-bold mb-4 text-center">
+Student Distribution by Branch
+</h2>
+
+<canvas id="branchChart"></canvas>
+
+</div>
+
+
+<!-- Student Table Section -->
+
+<div class="max-w-4xl mx-auto bg-white shadow rounded">
+
+<div class="mb-6 text-center">
+
+<div class="text-right mb-4">
+<a href="/export" 
+class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700">
+Export Excel
+</a>
+</div>
+
+<!-- Search Form -->
+
+<form method="GET" action="/" class="mb-4 text-center space-x-2">
+
+
+<input 
+type="text"
+name="search"
+placeholder="Search student name..."
+value="<%= search || '' %>"
+class="border p-2"
+oninput="if(this.value===''){window.location='/';}">
+
+<select name="branch" class="border p-2">
+
+<option value="">All Branches</option>
+
+<option value="CSE" <%= branch === 'CSE' ? 'selected' : '' %>>CSE</option>
+
+<option value="ECE" <%= branch === 'ECE' ? 'selected' : '' %>>ECE</option>
+
+<option value="MECH" <%= branch === 'MECH' ? 'selected' : '' %>>MECH</option>
+
+</select>
+<select name="sort" class="border p-2">
+
+<option value="">Sort By</option>
+
+<option value="cgpa_desc">CGPA High → Low</option>
+
+<option value="cgpa_asc">CGPA Low → High</option>
+
+</select>
+
+<button class="bg-blue-500 text-white px-4 py-2">
+Search
+</button>
+
+</form>
+
+
+<!-- Add Student Form -->
+<% if (session && session.admin) { %>
+<form action="/add" method="POST" enctype="multipart/form-data" class="space-x-2">
+
+<input name="name" placeholder="Name" class="border p-2">
+<input name="age" placeholder="Age" class="border p-2">
+<select name="branch" class="border p-2">
+
+<option value="CSE">CSE</option>
+<option value="ECE">ECE</option>
+<option value="MECH">MECH</option>
+
+</select>
+<input name="cgpa" placeholder="CGPA" class="border p-2">
+
+<input type="file" name="photo" class="border p-2">
+
+<button class="bg-green-500 text-white px-4 py-2">
+Add Student
+</button>
+
+</form>
+<% } %>
+
+</div>
+
+
+<!-- Table -->
+
+<table class="w-full rounded-lg overflow-hidden">
+
+<thead class="bg-gradient-to-r from-blue-500 to-blue-700 text-white">
+
+<tr>
+<th class="p-3">ID</th>
+<th class="p-3">Name</th>
+<th class="p-3">Age</th>
+<th class="p-3">Branch</th>
+<th class="p-3">CGPA</th>
+<th class="p-3">Joined</th>
+<th class="p-3">Action</th>
+<th class="p-3">Photo</th>
+
+</tr>
+
+</thead>
+
+<tbody class="divide-y">
+
+
+<% students.forEach(student => { %>
+
+<tr class="text-center border-b hover:bg-gray-100 transition duration-200">
+
+<td class="p-2"><%= student.id %></td>
+<td class="p-2">
+<a href="/student/<%= student.id %>" class="text-blue-600 font-semibold hover:underline">
+<%= student.name %>
+</a>
+</td>
+
+
+<td class="p-2"><%= student.age %></td>
+
+<td class="p-2"><%= student.branch %></td>
+
+<td class="p-2"><%= student.cgpa %></td>
+<td class="p-2">
+<%= new Date(student.created_at).toLocaleDateString() %>
+</td>
+
+<% if (session && session.admin) { %>
+<td class="p-2 space-x-2">
+
+<a href="/edit/<%= student.id %>" 
+class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded shadow">
+Edit
+</a>
+
+<a href="/delete/<%= student.id %>" 
+onclick="return confirm('Are you sure you want to delete this student?')"
+class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded shadow">
+Delete
+</a>
+
+</td>
+<% } %>
+<td class="p-2">
+<img src="/uploads/<%= student.photo || 'default.png' %>" 
+class="w-12 h-12 object-cover rounded-full mx-auto border">
+</td>
+
+</tr>
+
+
+<% }) %>
+
+</tbody>
+
+</table>
+<div class="text-center p-4">
+
+<% if(page > 1){ %>
+<a href="/?page=<%= page-1 %>&search=<%= search || '' %>&branch=<%= branch || '' %>&sort=<%= sort || '' %>"
+class="bg-gray-300 px-3 py-1 rounded mr-2">
+Previous
+</a>
+<% } %>
+
+<span class="font-bold">
+Page <%= page %> of <%= totalPages %>
+</span>
+
+<% if(page < totalPages){ %>
+<a href="/?page=<%= page+1 %>&search=<%= search || '' %>&branch=<%= branch || '' %>&sort=<%= sort || '' %>"
+class="bg-gray-300 px-3 py-1 rounded ml-2">
+Next
+</a>
+<% } %>
+
+</div>
+
+</div>
+
+
+<!-- Chart Script -->
+
+<script>
+
+const ctx = document.getElementById('branchChart');
+
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: ['CSE','ECE','MECH'],
+datasets: [{
+label: 'Students',
+data: [Number("<%= cse %>"), Number("<%= ece %>"), Number("<%= mech %>")],
+
+backgroundColor: [
+'#22c55e',
+'#eab308',
+'#a855f7'
+]
+}]
+},
+options: {
+responsive: true,
+plugins: {
+legend: {
+display: false
+}
+}
+}
+});
+
+</script>
+
+</body>
+</html>
