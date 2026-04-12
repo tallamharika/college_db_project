@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Photo</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+
+<div class="bg-white p-6 rounded shadow text-center">
+
+<img src="/uploads/<%= photo || 'default.png' %>" 
+class="w-80 h-80 object-cover rounded border mx-auto">
+
+<br>
+
+<a href="/" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">
+Back
+</a>
+
+</div>
+
+</body>
+</html>

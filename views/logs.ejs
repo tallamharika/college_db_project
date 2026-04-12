@@ -1,0 +1,19 @@
+<h1>Activity Logs</h1>
+
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Action</th>
+    <th>Student ID</th>
+    <th>Date</th>
+  </tr>
+
+  <% logs.forEach(log => { %>
+    <tr>
+      <td><%= log.id %></td>
+      <td><%= log.action %></td>
+      <td><%= log.student_id %></td>
+      <td><%= new Date(log.timestamp).toLocaleString() %></td>
+    </tr>
+  <% }) %>
+</table>

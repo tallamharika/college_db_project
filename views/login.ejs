@@ -7,6 +7,7 @@
 <body class="bg-gray-100 flex justify-center items-center h-screen">
 
 <form action="/login" method="POST" class="bg-white p-6 rounded shadow space-y-4">
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
 <h2 class="text-xl font-bold text-center">Admin Login</h2>
 
@@ -21,3 +22,4 @@ Login
 
 </body>
 </html>
+ 

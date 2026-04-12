@@ -102,9 +102,14 @@ oninput="if(this.value===''){window.location='/';}">
 
 <option value="">Sort By</option>
 
-<option value="cgpa_desc">CGPA High → Low</option>
+<option value="cgpa_desc" <%= sort === 'cgpa_desc' ? 'selected' : '' %>>
+CGPA High → Low
+</option>
 
-<option value="cgpa_asc">CGPA Low → High</option>
+<option value="cgpa_asc" <%= sort === 'cgpa_asc' ? 'selected' : '' %>>
+CGPA Low → High
+</option>
+
 
 </select>
 
@@ -113,12 +118,22 @@ Search
 </button>
 
 </form>
+<% if (successMessage) { %>
+  <div id="successMsg" class="fixed top-5 right-5 bg-green-500 text-white px-4 py-3 rounded shadow-lg transition-opacity duration-500">
+    <%= successMessage %>
+  </div>
+<% } %>
 
+<% if (errorMessage) { %>
+  <div id="errorMsg" class="fixed top-5 right-5 bg-red-500 text-white px-4 py-3 rounded shadow-lg transition-opacity duration-500">
+    <%= errorMessage %>
+  </div>
+<% } %>
 
 <!-- Add Student Form -->
 <% if (session && session.admin) { %>
 <form action="/add" method="POST" enctype="multipart/form-data" class="space-x-2">
-
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
 <input name="name" placeholder="Name" class="border p-2">
 <input name="age" placeholder="Age" class="border p-2">
 <select name="branch" class="border p-2">
@@ -193,19 +208,24 @@ Add Student
 class="bg-blue-500 hover:bg-blue-700 text-white px-3 py-1 rounded shadow">
 Edit
 </a>
-
-<a href="/delete/<%= student.id %>" 
+<form action="/delete/<%= student.id %>" method="POST" style="display:inline;">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<button type="submit"
 onclick="return confirm('Are you sure you want to delete this student?')"
 class="bg-red-500 hover:bg-red-700 text-white px-3 py-1 rounded shadow">
 Delete
-</a>
+</button>
 
+</form>
 </td>
 <% } %>
 <td class="p-2">
-<img src="/uploads/<%= student.photo || 'default.png' %>" 
-class="w-12 h-12 object-cover rounded-full mx-auto border">
+<a href="/student/<%= student.id %>/photo">
+  <img src="/uploads/<%= student.photo || 'default.png' %>" 
+  class="w-12 h-12 object-cover rounded-full mx-auto border cursor-pointer">
+</a>
 </td>
+
 
 </tr>
 
@@ -215,10 +235,14 @@ class="w-12 h-12 object-cover rounded-full mx-auto border">
 </tbody>
 
 </table>
+<%
+const queryString = `&search=${search || ''}&branch=${branch || ''}&sort=${sort || ''}`;
+%>
+
 <div class="text-center p-4">
 
 <% if(page > 1){ %>
-<a href="/?page=<%= page-1 %>&search=<%= search || '' %>&branch=<%= branch || '' %>&sort=<%= sort || '' %>"
+<a href="/?page=<%= page-1 %><%= queryString %>"
 class="bg-gray-300 px-3 py-1 rounded mr-2">
 Previous
 </a>
@@ -229,7 +253,7 @@ Page <%= page %> of <%= totalPages %>
 </span>
 
 <% if(page < totalPages){ %>
-<a href="/?page=<%= page+1 %>&search=<%= search || '' %>&branch=<%= branch || '' %>&sort=<%= sort || '' %>"
+<a href="/?page=<%= page+1 %><%= queryString %>"
 class="bg-gray-300 px-3 py-1 rounded ml-2">
 Next
 </a>
@@ -271,6 +295,30 @@ display: false
 }
 });
 
+</script>
+<script>
+  // Remove messages after 3 seconds
+  setTimeout(() => {
+  const success = document.getElementById('successMsg');
+  const error = document.getElementById('errorMsg');
+
+  if (success) {
+    success.style.opacity = '0';
+    setTimeout(() => success.remove(), 500);
+  }
+
+  if (error) {
+    error.style.opacity = '0';
+    setTimeout(() => error.remove(), 500);
+  }
+
+}, 3000);
+
+
+  // Clean URL (remove ?success= or ?error=)
+  if (window.location.search) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 </script>
 
 </body>
