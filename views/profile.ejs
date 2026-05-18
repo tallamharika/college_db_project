@@ -12,21 +12,39 @@
 Student Profile
 </h1>
 
-<div class="max-w-md mx-auto bg-white p-6 rounded shadow text-center">
+<div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl text-center">
 
-<img src="/uploads/<%= student.photo || 'default.png' %>" 
-class="w-32 h-32 rounded-full mx-auto object-cover mb-4 border">
+<img src="/uploads/<%= student.photo || 'default.png' %>"
+class="w-40 h-40 rounded-full mx-auto object-cover mb-6 border-4 border-blue-500 shadow-lg">
 
-<h2 class="text-xl font-bold mb-2"><%= student.name %></h2>
+<h2 class="text-3xl font-bold mb-4 text-blue-700">
+<%= student.name %>
+</h2>
 
-<p class="text-gray-700">Age: <%= student.age %></p>
+<div class="space-y-3 text-lg">
 
-<p class="text-gray-700">Branch: <%= student.branch %></p>
+<p>
+<span class="font-bold">Age:</span>
+<%= student.age %>
+</p>
 
-<p class="text-gray-700">CGPA: <%= student.cgpa %></p>
+<p>
+<span class="font-bold">Branch:</span>
+<%= student.branch %>
+</p>
 
-<a href="/" class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded">
-Back
+<p>
+<span class="font-bold">CGPA:</span>
+<%= student.cgpa %>
+</p>
+
+</div>
+
+<a href="/"
+class="inline-block mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
+
+⬅ Back
+
 </a>
 
 </div>
