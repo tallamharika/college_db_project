@@ -279,6 +279,9 @@ router.get('/', isAdmin, csrfProtection, async (req, res) => {
   try {
 
     const page = parseInt(req.query.page) || 1;
+    if (page < 1) {
+  return res.redirect('/?page=1');
+}
     const limit = 5;
     const offset = (page - 1) * limit;
 
