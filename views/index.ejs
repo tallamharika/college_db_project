@@ -317,9 +317,8 @@ Previous
 <% } %>
 
 <span class="font-bold">
-Page <%= page %> of <%= totalPages %>
+Page <%= totalPages === 0 ? 0 : page %> of <%= totalPages %>
 </span>
-
 <% if(page < totalPages){ %>
 <a href="/?page=<%= page+1 %><%= queryString %>"
 class="bg-gray-300 px-3 py-1 rounded ml-2">

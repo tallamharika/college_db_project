@@ -46,9 +46,10 @@ app.use('/', studentRoutes);
 
 // 404
 app.use((req, res) => {
-  res.status(404).send("Page Not Found");
+  res.status(404).render('error', {
+    message: "404 Page Not Found"
+  });
 });
-
 // Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);

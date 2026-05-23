@@ -1,19 +1,72 @@
-<h1>Activity Logs</h1>
+<!DOCTYPE html>
+<html>
 
-<table border="1">
-  <tr>
-    <th>ID</th>
-    <th>Action</th>
-    <th>Student ID</th>
-    <th>Date</th>
-  </tr>
+<head>
+  <title>Activity Logs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-  <% logs.forEach(log => { %>
-    <tr>
-      <td><%= log.id %></td>
-      <td><%= log.action %></td>
-      <td><%= log.student_id %></td>
-      <td><%= new Date(log.timestamp).toLocaleString() %></td>
-    </tr>
-  <% }) %>
+<body class="bg-gray-100 p-10">
+
+<div class="max-w-4xl mx-auto bg-white shadow-lg rounded-xl p-6">
+
+<h1 class="text-3xl font-bold text-center mb-6 text-blue-700">
+Activity Logs
+</h1>
+
+<table class="w-full border-collapse">
+
+<thead>
+
+<tr class="bg-blue-600 text-white">
+
+<th class="p-3">ID</th>
+<th class="p-3">Action</th>
+<th class="p-3">Student ID</th>
+<th class="p-3">Date</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<% logs.forEach(log => { %>
+
+<tr class="text-center border-b hover:bg-gray-100">
+
+<td class="p-3"><%= log.id %></td>
+
+<td class="p-3 font-bold">
+<%= log.action %>
+</td>
+
+<td class="p-3">
+<%= log.student_id %>
+</td>
+
+<td class="p-3">
+<%= new Date(log.timestamp).toLocaleString() %>
+</td>
+
+</tr>
+
+<% }) %>
+
+</tbody>
+
 </table>
+
+<div class="text-center mt-6">
+
+<a href="/"
+class="bg-blue-500 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+Back
+</a>
+
+</div>
+
+</div>
+
+</body>
+</html>
